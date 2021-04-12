@@ -16,20 +16,21 @@ namespace Client
             var server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             server.Connect(ipServer);
 
-            var message = Console.ReadLine();
-            var data = Encoding.Unicode.GetBytes(message);
-            server.Send(data);
-            
-            var msg = new StringBuilder();
-            var dataSend = new byte[256];
-
-            do
+            while (true)
             {
-                var bytes = server.Receive(data);
-                msg.Append(Encoding.Unicode.GetString(dataSend, 0, bytes));
-            } while (server.Available > 0);
-                
-            Console.WriteLine($"{DateTime.Now:u}: {message}");
+                var message = Console.ReadLine();
+                var data = Encoding.Unicode.GetBytes(message);
+                server.Send(data);
+            
+                var msg = new StringBuilder();
+                var dataSend = new byte[256];
+                do
+                {
+                    var bytes = server.Receive(data);
+                    msg.Append(Encoding.Unicode.GetString(dataSend, 0, bytes));
+                } while (server.Available > 0);
+                Console.WriteLine($"{DateTime.Now:u}: {msg}");
+            }
             
             server.Shutdown(SocketShutdown.Both);
             server.Close();
