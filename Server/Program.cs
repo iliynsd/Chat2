@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -18,15 +19,20 @@ namespace Server
             listen.Bind(ipServer);
             listen.Listen(10);
 
+            int count = 0;
+            var clients = new Dictionary<int, Socket>();
+
             while (true)
             {
                 var client = listen.Accept();
-
-                var task = Task.Run(() => NewClient(client));
+                count++;
+                clients.Add(count, client);
+                var count1 = count;
+                var task = Task.Run(() => NewClient(client, count1, ref clients));
             }
         }
 
-        static void NewClient(Socket client)
+        static void NewClient(Socket client, int id, ref Dictionary<int, Socket> clients)
         {
             var message = new StringBuilder();
             var data = new byte[256];
@@ -38,11 +44,16 @@ namespace Server
                     var bytes = client.Receive(data);
                     message.Append(Encoding.Unicode.GetString(data, 0, bytes));
                 } while (client.Available > 0);
-                Console.WriteLine($"{DateTime.Now:u}: {message}");
 
-                const string MSG = "Сообщение получено";
-                var dataSend = Encoding.Unicode.GetBytes(MSG);
-                client.Send(dataSend);
+                var temp = $"#{id} {DateTime.Now:u}: {message}";
+                Console.WriteLine(temp);
+                
+                var dataSend = Encoding.Unicode.GetBytes(temp);
+
+                foreach (var item in clients)
+                {
+                    item.Value.Send(dataSend);
+                }
             }
             client.Shutdown(SocketShutdown.Both);
             client.Close();
