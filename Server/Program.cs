@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
+using MessageModel;
 using TCPLibrary;
 
 namespace Server
@@ -22,18 +24,29 @@ namespace Server
 
         static void TaskClient(TCPClient client)
         {
-            ShowInfo("Клиент подключился");
+            var name = "Анон";
+            var name_temp = JsonSerializer.Deserialize<Message>(client.GetMessage());
+            if (name_temp.Type == TypeMessage.Name)
+            {
+                name = name_temp.Msg;
+                ShowInfo($"Клиент {name} подключился");
+            }
+            
             while (true)
             {
-                var messageReceive = client.GetMessage();
-                if (messageReceive == @"\stop")
+                var msg_temp = JsonSerializer.Deserialize<Message>(client.GetMessage());
+                if (msg_temp.Type == TypeMessage.Stop)
                 {
                     ShowInfo("Клиент отключился...");
                     break;
                 }
-                Console.WriteLine(messageReceive);
 
-                client.SendMessage("Сообщение получено");
+                if (msg_temp.Type == TypeMessage.Message)
+                {
+                    ShowInfo($"Сообщение от {name}: {msg_temp.Msg}");
+                }
+
+                client.SendMessage(MessageTypeMessage("Сообщение получено"));
             }
             client.Close();
         }
@@ -43,6 +56,17 @@ namespace Server
             Console.ForegroundColor = ConsoleColor.DarkBlue;
             Console.WriteLine(message);
             Console.ResetColor();
+        }
+        
+        static string MessageTypeMessage(string message)
+        {
+            var msg = new Message
+            {
+                Type = TypeMessage.Message,
+                Msg = message
+            };
+            var msg_send = JsonSerializer.Serialize(msg);
+            return msg_send;
         }
     }
 }

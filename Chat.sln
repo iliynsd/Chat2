@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPLibrary", "TCPLibrary\TCPLibrary.csproj", "{603174EE-BBC3-4672-8847-898967F0ED49}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageModel", "MessageModel\MessageModel.csproj", "{DBB1EF73-6705-4786-9952-F0DDFBC35191}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{603174EE-BBC3-4672-8847-898967F0ED49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{603174EE-BBC3-4672-8847-898967F0ED49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{603174EE-BBC3-4672-8847-898967F0ED49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBB1EF73-6705-4786-9952-F0DDFBC35191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBB1EF73-6705-4786-9952-F0DDFBC35191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBB1EF73-6705-4786-9952-F0DDFBC35191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBB1EF73-6705-4786-9952-F0DDFBC35191}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
